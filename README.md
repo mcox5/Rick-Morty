@@ -3,7 +3,7 @@
 El siguiente código es una aplicación que se ejecuta en terminal para poder resolver el desafío de Rick&Morty de Chipax!
 
 **ANTES DE EJECUTAR EL PROGRAMA IMPORTANTE -- INSTALAR LIBRERIAS**
-Antes de ejecutar el programa se deben instalar ciertas gemas que se utilizaron para su código. (rest-client para hacer llamado a la API, rspec para realizar los testing)
+Antes de ejecutar el programa se deben instalar ciertas gemas que se utilizaron para su código. ([rest-client](https://www.rubydoc.info/gems/rest-client/1.8.0) para hacer llamado a la API, [rspec](https://rubygems.org/gems/rspec/versions/3.4.0?locale=es) para realizar los testing)
 Debes ejecutar las siguientes lineas de código para su instalación: (JSON y Time vienen por default instaladas en ruby)
 1. `gem install rest-client`
 2. `gem install rspec`
@@ -43,10 +43,25 @@ La aplicación se creo siguiento un **patron MVC** (MODELO, VISTA, CONTROLADOR)
 4. El **rickmorty.rb** se encarga de hacer todas las peticiones a la API de Rick & Morty, almacenando esa información para que después la trabaje el controlador.
 5. El **router.rb** se encarga de generar el código con las distintas opciones que tendrá el usuario a ejecutar, en este caso, los dos juegos `char_counter` o `episode_locations` o bien detener el programa.
 6. El **app.rb** tiene la misión de instanciar las variables del controlador y del router para dar inicio a la aplicación
+7. Los archivos csv como por ejemplo **characters.csv** actuan como base de datos del programa, los cuales tienen como objetivo mejorar el performance de este, haciendo necesario cargar una sola vez la API (que es lo que más consume tiempo). Si desea eliminar la base de datos, para usar el programa consumiendo directamente desde la API basta con borrar estos tres archivos csv (los cuales se volveran a cargar desde cero cuando se ejecute el programa)
 
 **OBSERVACIONES**
+
 Para el cálculo del tiempo de ejecución se consideró como punto de partida una vez que las peticiones a la API ya fueron realizadas.
 
 Para ejecutar los **TEST** se debe ejecutar en consola el archivo de test.rb ubicado en la carpeta spec para esto:
 1. Nos debemos para en la carpeta principal con el comando `cd Rick&Morty`
 2. Ejecutamos el archivo app.rb con el comando `ruby spec/test.rb`
+
+**CONTRIBUCIONES**
+
+A continuación se da una serie de buenas prácticas para poder contribuir en el proyecto de Rick&Morty
+1. Realizar siempre commits descriptivos.
+2. La rama principal es la rama `master`
+3. Para crear/arreglar **SIEMPRE** trabajar desde ramas diferentes a la `master`
+3. 1- Para arreglar se debe crear rama bajo el prefijo `fix` (ejemplo: quiero arreglar archivo de test la rama sería: `fix_test`)
+2 - Para crear nueva feature se debe crear rama bajo el prefijo `new`(ejemplo: quiero agregar un nuevo modelo `new_model`)
+
+**CHANGELOG**
+
+Se posee un archivo aparte con todos los cambios realizados al programa a partir de su base funcional
