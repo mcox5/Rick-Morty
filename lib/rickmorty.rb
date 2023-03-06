@@ -1,4 +1,4 @@
-# Este archivo es el que almacenará toda la información de Rick&Morty, como episodios, localizacion, personajes
+# Este archivo es el que se engargua de almacenar toda la información de Rick&Morty, como episodios, localizacion, personajes
 # Sería como el equivalente a un libro de cocina, el cual contiene todas las recetas
 
 require_relative 'models/character'
@@ -6,17 +6,28 @@ require_relative 'models/episode'
 require_relative 'models/location'
 require 'json'
 require 'rest-client'
+require 'csv'
 
 class Rickmorty
   attr_reader :characters, :locations, :episodes
 
-  def initialize
+  def initialize(csv_file_character_path, csv_file_episode_path, csv_file_location_path)
+    @csv_file_character_path = csv_file_character_path
+    @csv_file_episode_path = csv_file_episode_path
+    @csv_file_location_path = csv_file_location_path
     @characters = []
     @locations = []
     @episodes = []
-    load_characters # Las funciones load dentro del initialize es para que se cargue automaticamente la info desde la API para cuando instanciemos a Rickmorty
-    load_locations
-    load_episodes
+    # Chequeamos si la base de datos esta cargada (basta con chequear solo una ya que se cargan las tres al mismo tiempo)
+    csv_table = CSV.table(@csv_file_character_path)
+    if csv_table.count.positive?
+      load_csv
+    else
+      load_characters
+      load_locations
+      load_episodes
+      charge_csv
+    end
   end
 
   # El método get_request hace la petición get a la API dependiendo de la URL que se le entregue
@@ -96,9 +107,37 @@ class Rickmorty
     return counter
   end
 end
+  # Método que se utilizará en caso de que el CSV ya esté cargado (instanciamos a partir del CSV)
+  def load_csv
+    CSV.foreach(@csv_file_character_path) do |row|
+      character = Character.new(row[0], row[1])
+      @characters.push(character)
+    end
+    CSV.foreach(@csv_file_episode_path) do |row|
+      episode = Episode.new(row[0], row[1], row[2].split(';'))
+      @episodes.push(episode)
+    end
+    CSV.foreach(@csv_file_location_path) do |row|
+      location = Location.new(row[0])
+      @locations.push(location)
+    end
+  end
 
-# ---------------------------------------
-
-# rickmortycheck = Rickmorty.new
-# # p rickmortycheck.characters
-# rickmortycheck.count_letter("a", rickmortycheck.characters)
+  # Método que se utilizará para cargar por primera vez el CSV (se ejecuta después del llamado a la APi)
+  def charge_csv
+    CSV.open(@csv_file_character_path, "w") do |csv|
+      @characters.each do |character_to_read|
+        csv << [character_to_read.name, character_to_read.origin]
+      end
+    end
+    CSV.open(@csv_file_episode_path, "w") do |csv|
+      @episodes.each do |episode_to_read|
+        csv << [episode_to_read.name, episode_to_read.episode_number, episode_to_read.locations.join(';')]
+      end
+    end
+    CSV.open(@csv_file_location_path, "w") do |csv|
+      @locations.each do |location_to_read|
+        csv << [location_to_read.name]
+      end
+    end
+  end
