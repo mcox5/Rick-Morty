@@ -13,7 +13,7 @@ controller = Controller.new(rickmorty)
 router = Router.new(controller)
 
 # Start the app
-# router.run
+router.run
 
 #-------------------------------------------------
-p rickmorty.episodes
+# p rickmorty.episodes

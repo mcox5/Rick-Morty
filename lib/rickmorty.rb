@@ -122,7 +122,7 @@ end
     end
     CSV.foreach(@csv_file_episode_path) do |row|
       # cada row es un array de las columnas, aca @recipes debiera ser un array de instancias de episode
-      episode = Episode.new(row[0], row[1], row[2])
+      episode = Episode.new(row[0], row[1], row[2].split(';'))
       @episodes.push(episode)
     end
     CSV.foreach(@csv_file_location_path) do |row|
@@ -141,7 +141,7 @@ end
     end
     CSV.open(@csv_file_episode_path, "w") do |csv|
       @episodes.each do |episode_to_read|
-        csv << [episode_to_read.name, episode_to_read.episode_number, episode_to_read.locations.to_s]
+        csv << [episode_to_read.name, episode_to_read.episode_number, episode_to_read.locations.join(';')]
       end
     end
     CSV.open(@csv_file_location_path, "w") do |csv|
