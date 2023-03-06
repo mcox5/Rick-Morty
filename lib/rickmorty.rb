@@ -19,7 +19,6 @@ class Rickmorty
     @locations = []
     @episodes = []
     # Chequeamos si la base de datos esta cargada (basta con chequear solo una ya que se cargan las tres al mismo tiempo)
-    # 1er caso (SI):
     csv_table = CSV.table(@csv_file_character_path)
     if csv_table.count.positive?
       load_csv
@@ -116,23 +115,20 @@ end
   # Método que se utilizará en caso de que el CSV ya esté cargado (instanciamos a partir del CSV)
   def load_csv
     CSV.foreach(@csv_file_character_path) do |row|
-      # cada row es un array de las columnas, aca @recipes debiera ser un array de instancias de character
       character = Character.new(row[0], row[1])
       @characters.push(character)
     end
     CSV.foreach(@csv_file_episode_path) do |row|
-      # cada row es un array de las columnas, aca @recipes debiera ser un array de instancias de episode
       episode = Episode.new(row[0], row[1], row[2].split(';'))
       @episodes.push(episode)
     end
     CSV.foreach(@csv_file_location_path) do |row|
-      # cada row es un array de las columnas, aca @recipes debiera ser un array de instancias de location
       location = Location.new(row[0])
       @locations.push(location)
     end
   end
 
-  #Método que se utilizará para cargar por primera vez el CSV
+  # Método que se utilizará para cargar por primera vez el CSV (se ejecuta después del llamado a la APi)
   def charge_csv
     CSV.open(@csv_file_character_path, "w") do |csv|
       @characters.each do |character_to_read|
@@ -150,15 +146,3 @@ end
       end
     end
   end
-# ---------------------------------------
-
-# # p rickmortycheck.characters
-# rickmortycheck.count_letter("a", rickmortycheck.characters)
-# character_csv_file = File.join(__dir__, 'characters.csv')
-# episode_csv_file = File.join(__dir__, 'episodes.csv')
-# location_csv_file = File.join(__dir__, 'locations.csv')
-
-# rickmortycheck = Rickmorty.new(character_csv_file, episode_csv_file, location_csv_file)
-# p rickmortycheck.characters
-# p rickmortycheck.episodes
-# p rickmortycheck.locations
