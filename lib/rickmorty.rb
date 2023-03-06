@@ -1,4 +1,4 @@
-# Este archivo es el que almacenará toda la información de Rick&Morty, como episodios, localizacion, personajes
+# Este archivo es el que se engargua de almacenar toda la información de Rick&Morty, como episodios, localizacion, personajes
 # Sería como el equivalente a un libro de cocina, el cual contiene todas las recetas
 
 require_relative 'models/character'
@@ -28,11 +28,6 @@ class Rickmorty
       load_episodes
       charge_csv
     end
-    # load_characters # Las funciones load dentro del initialize es para que se cargue automaticamente la info desde la API para cuando instanciemos a Rickmorty
-    # load_locations
-    # load_episodes
-    # load_csv
-    # charge_csv
   end
 
   # El método get_request hace la petición get a la API dependiendo de la URL que se le entregue
